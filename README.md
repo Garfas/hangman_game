@@ -1,2 +1,2 @@
-# hangman_game
-code for hangman game
+# Hangman Game
+code for hangman game.
