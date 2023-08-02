@@ -1,14 +1,18 @@
 
+from bs4 import BeautifulSoup
 import requests
 import random
-from bs4 import BeautifulSoup
 
 def get_random_words(num_words):
+    url = "https://www.randomlists.com/random-words"
     response = requests.get(url)
-    soup = BeautifulSoup(response.txt, "html.praser")
-    words = soup.find_all("div", {"class": "section", "id": "random_word"})
+    soup = BeautifulSoup(response.text, "html.parser")
+    words = soup.find_all("div", {"class": "stylelistrow"})
     word_list = [word.get_text().strip().lower() for word in words]
-    random_words = random.sample(word_list, num_words)
+    random_words = random.sample(word_list, min(num_words, len(word_list)))
+    return random_words
+
+
 
 #Nustatoma konstanta
 MAX_ATTEMPTS = 10
