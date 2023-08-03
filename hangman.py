@@ -4,25 +4,34 @@ import random
 from bs4 import BeautifulSoup
 
 def get_random_words(num_words):
-    url = "https://www.randomlists.com/random-words"
+    url = f"https://random-words-api.vercel.app/word?number={num_words}"
     try:
         response = requests.get(url)
         response.raise_for_status()
-        soup = BeautifulSoup(response.text, "html.parser")
-        words = soup.find_all("div", {"class": "stylelistrow"})
-        word_list = [word.get_text().strip().lower() for word in words]
+        data = response.json()
+        # soup = BeautifulSoup(response.text, "html.parser")
+        # words = soup.find_all("div", {"class": "section", "id": "random_word"})
+        # word_list = [word.get_text().strip().lower() for word in words]
+        word_list = [word["word"].strip().lower() for word in data]
+
+        if not word_list:
+            print("No words were retrieved from the website.")
+            return[]
+        
         return  random.sample(word_list, min(num_words, len(word_list)))
     except requests.exceptions.RequestException as e:
         print("Error fetching data from the website. Please check your internet connection")
         return[]
     except Exception as e:
         print("An error occurred while parsing the website data.")
+        return[]
 
 #Nustatoma konstanta
 MAX_ATTEMPTS = 10
 
 def initialize_game():
     word_to_guess = random.choice(get_random_words(1))
+    print("word to guess:", word_to_guess) #išspausdiname gautą žodį
     attempts_left = MAX_ATTEMPTS
     guessed_letters = set()
 
@@ -31,7 +40,7 @@ def initialize_game():
 def get_guess():
     return input ("Guess a letter or the whole word:").lower()
 
-def update_word_representation(word, guessed_letters) -> str:
+def update_word_representation(word, guessed_letters):
     return "".join([letter if letter in guessed_letters else "_" for letter in word])
 
 def game_cycle():
