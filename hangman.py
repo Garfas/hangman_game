@@ -1,18 +1,22 @@
 
-from bs4 import BeautifulSoup
 import requests
 import random
+from bs4 import BeautifulSoup
 
 def get_random_words(num_words):
     url = "https://www.randomlists.com/random-words"
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, "html.parser")
-    words = soup.find_all("div", {"class": "stylelistrow"})
-    word_list = [word.get_text().strip().lower() for word in words]
-    random_words = random.sample(word_list, min(num_words, len(word_list)))
-    return random_words
-
-
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        soup = BeautifulSoup(response.text, "html.parser")
+        words = soup.find_all("div", {"class": "stylelistrow"})
+        word_list = [word.get_text().strip().lower() for word in words]
+        return  random.sample(word_list, min(num_words, len(word_list)))
+    except requests.exceptions.RequestException as e:
+        print("Error fetching data from the website. Please check your internet connection")
+        return[]
+    except Exception as e:
+        print("An error occurred while parsing the website data.")
 
 #Nustatoma konstanta
 MAX_ATTEMPTS = 10
