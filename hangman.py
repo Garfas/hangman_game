@@ -26,13 +26,22 @@ class HangmanGame:
         self.attempts_left = MAX_ATTEMPTS
         self.guessed_letters = set()
 
-    return word_to_guess, attempts_left, guessed_letters
 
-def get_guess():
-    return input ("Guess a letter or the whole word:").lower()
+    def get_guess(self ) -> str:
+        return input ("Guess a letter or the whole word:").lower()
 
-def update_word_representation(word, guessed_letters):
-    return "".join([letter if letter in guessed_letters else "_" for letter in word])
+    def update_word_representation(self):
+        return "".join([letter if letter in self.guessed_letters else "_" for letter in self.word_to_guess])
+    
+    def make_guess(self, guess: str) -> bool:
+        if len (guess) == 1:
+            self.guessed_letters.add(guess)
+            return guess in self.word_to_guess
+        elif len(guess) == len(self.word_to_guess) and guess == self.word_to_guess:
+            return True
+        return False
+
+
 
 def game_cycle():
     while True:
