@@ -1,30 +1,30 @@
-
-import requests
 import random
+import sqlite3
+import requests
 from bs4 import BeautifulSoup
+from typing import List, Optional
+import logging
 
-def get_random_words(num_words):
-    url = f"https://random-words-api.vercel.app/word?number={num_words}"
-    try:
-        response = requests.get(url)
-        response.raise_for_status()
-        data = response.json()
-        # soup = BeautifulSoup(response.text, "html.parser")
-        # words = soup.find_all("div", {"class": "section", "id": "random_word"})
-        # word_list = [word.get_text().strip().lower() for word in words]
-        word_list = [word["word"].strip().lower() for word in data]
+# def get_random_words(num_words):
+#     url = f"https://random-words-api.vercel.app/word?number={num_words}"
+#     try:
+#         response = requests.get(url)
+#         response.raise_for_status()
+#         data = response.json()
+#        
+#         word_list = [word["word"].strip().lower() for word in data]
 
-        if not word_list:
-            print("No words were retrieved from the website.")
-            return[]
+#         if not word_list:
+#             print("No words were retrieved from the website.")
+#             return[]
         
-        return  random.sample(word_list, min(num_words, len(word_list)))
-    except requests.exceptions.RequestException as e:
-        print("Error fetching data from the website. Please check your internet connection")
-        return[]
-    except Exception as e:
-        print("An error occurred while parsing the website data.")
-        return[]
+#         return  random.sample(word_list, min(num_words, len(word_list)))
+#     except requests.exceptions.RequestException as e:
+#         print("Error fetching data from the website. Please check your internet connection")
+#         return[]
+#     except Exception as e:
+#         print("An error occurred while parsing the website data.")
+#         return[]
 
 #Nustatoma konstanta
 MAX_ATTEMPTS = 10
