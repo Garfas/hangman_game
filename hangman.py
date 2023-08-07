@@ -66,14 +66,14 @@ class HangmanDatabase:
                     attempts INTEGER NOT NULL,
                     guessed_letters TEXT NOT NULL,
                     won BOOLEAN NOT NULL,
-                    FOREIGN (user_id) REFERENCES user (id)
+                    FOREIGN KEY (user_id) REFERENCES user (id)
                 )
                 '''
             )
 
     def register_user(self, name: str, surname: str, email: str) -> int:
         with self.conn:
-            cursor = self.conn.execute("INSERT INTO user (name, surname, email) VALUE (?, ?, ?)", (name, surname, email))
+            cursor = self.conn.execute("INSERT INTO user (name, surname, email) VALUES (?, ?, ?)", (name, surname, email))
             return cursor.lastrowid
         
     def save_games(self, user_id: int, game: HangmanGame, won: bool):
