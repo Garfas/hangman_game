@@ -5,13 +5,13 @@ from bs4 import BeautifulSoup
 from typing import List, Optional
 import logging
 
-
 #constants
 MAX_ATTEMPTS = 10
 DATABASE_FILE = "hangman.db"
 
 #Set up logging
 logging.basicConfig(level=logging.INFO, filename="hangman.log", format="%(asctime)s [%(levelname)s]: %(message)s")
+
 
 class HangmanGame:
     def __init__(self, word_list: List[str]):
@@ -20,12 +20,10 @@ class HangmanGame:
         self.attempts_left =MAX_ATTEMPTS
         self.guessed_letters = set()
 
-
     def initialize_game(self):
         self.word_to_guess = random.choice(self.word_list)
         self.attempts_left = MAX_ATTEMPTS
         self.guessed_letters = set()
-
 
     def get_guess(self ) -> str:
         return input ("Guess a letter or the whole word:").lower()
@@ -42,43 +40,74 @@ class HangmanGame:
         return False
 
 
+class HangmanDatabase:
+    def __init__(self) -> None:
+        self.conn = sqlite3.connect(DATABASE_FILE)
+        self.create_tables()
 
-def game_cycle():
-    while True:
-        word_to_guess, attempts_left, guessed_letters = initialize_game()
+    def create_tables(self):
+        with self.conn:(
+                '''
+                Create tables if not exists user(
+                id integer primary key,
+                name text not null,
+                email text not null unique
+                )'''
+        )
+        self.conn.execute(
+            '''Create tables if not exists games (
+            id integer primary key,
+            user_id integer not null,
+            guessed_letters taxt not null,
+            won Boolean not null,
+            foreign key (user_id) References user (id)
+            )'''
+        )
+    
+    def get_user_statistic(self, user_id: int) -> dict:
+        with self.conn:
+            cursor = self.conn.ececute(
+                "SELECT COUNT(*) AS total_games, SUM(won) AS games_won FROM games WHERE user_id = ?", (user_id)
+            )
+            row = cursor.fetchone()
+            return {"games_played": row[0], "games_won": row[1]}
+        
 
-        while attempts_left > 0:
-            current_representation = update_word_representation(word_to_guess, guessed_letters)
-            print(f'Word: {current_representation}')
-            print(f'Attempts left: {attempts_left}')
+    # def game_cycle():
+#         while True:
+#             word_to_guess, attempts_left, guessed_letters = initialize_game()
 
-            guess = get_guess()
+#         while attempts_left > 0:
+#             current_representation = update_word_representation(word_to_guess, guessed_letters)
+#             print(f'Word: {current_representation}')
+#             print(f'Attempts left: {attempts_left}')
 
-            if len(guess) == 1:
-                guessed_letters.add(guess)
-                if guess in word_to_guess:
-                    print("Correct guess!")
-                else:
-                    print("Incorrect guess!")
-                    attempts_left -= 1
-            elif len(guess) == len(word_to_guess) and guess == word_to_guess:
-                print("Congratulations! You gussed the whole word!")
-                break
-            else:
-                print("Incorrect guess! Try again.")
+#             guess = get_guess()
 
-            if "_" not in current_representation:
-                print("Congratulation! You guessed the word!")
-                break
+#             if len(guess) == 1:
+#                 guessed_letters.add(guess)
+#                 if guess in word_to_guess:
+#                     print("Correct guess!")
+#                 else:
+#                     print("Incorrect guess!")
+#                     attempts_left -= 1
+#             elif len(guess) == len(word_to_guess) and guess == word_to_guess:
+#                 print("Congratulations! You gussed the whole word!")
+#                 break
+#             else:
+#                 print("Incorrect guess! Try again.")
 
-        if attempts_left == 0:
-            print(f'Sorry, you lost. The word was "{word_to_guess}".')
+#             if "_" not in current_representation:
+#                 print("Congratulation! You guessed the word!")
+#                 break
 
-        play_again = input("Do you play again? (y/n): ").lower()
-        if play_again != "yes":
-            break
+#         if attempts_left == 0:
+#             print(f'Sorry, you lost. The word was "{word_to_guess}".')
 
-if __name__ == "__main__":
-    print("Welcome to Hangman!")
-    game_cycle()
+#         play_again = input("Do you play again? (y/n): ").lower()
+#         if play_again != "yes":
+#             break
 
+# if __name__ == "__main__":
+#     print("Welcome to Hangman!")
+#     game_cycle()
