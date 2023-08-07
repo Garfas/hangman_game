@@ -82,14 +82,14 @@ class HangmanDatabase:
             self.conn.execute(
                 """
                 INSERT INTO games (user_id, word, attempts, guessed_letters, won)
-                VALUE (?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?)
                 """,
                 (user_id, game.word_to_guess, game.attempts_left, guessed_letter_str, won),
             )
     
     def get_user_statistic(self, user_id: int) -> dict:
         with self.conn:
-            cursor = self.conn.ececute(
+            cursor = self.conn.execute(
                 "SELECT COUNT(*) AS total_games, SUM(won) AS games_won FROM games WHERE user_id = ?", (user_id,)
             )
             row = cursor.fetchone()
