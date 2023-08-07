@@ -41,35 +41,35 @@ class HangmanGame:
 
 
 class HangmanDatabase:
-    def __init__(self) -> None:
+    def __init__(self):
         self.conn = sqlite3.connect(DATABASE_FILE)
         self.create_tables()
 
     def create_tables(self):
         with self.conn:
             self.conn.execute(
-            '''
-            CREATE TABLES IF NOT EXISTS user(
-                id INTEGER PRIMARY KEY,
-                name TEXT NOT NULL,
-                surname TEXT NOT NULL,
-                email text not null unique
+                """
+                CREATE TABLE IF NOT EXISTS user(
+                    id INTEGER PRIMARY KEY,
+                    name TEXT NOT NULL,
+                    surname TEXT NOT NULL,
+                    email TEXT NOT NULL UNIQUE
+                )
+                """
             )
-            '''
-        )
-        self.conn.execute(
-            '''
-            CREATE TABLES IF NOT EXISTS games (
-            id INTEGER PRIMARY KEY,
-            user_id INTEGER NOT NULL,
-            word TEXT NOT NULL,
-            attempts INTEGER NOT NULL,
-            guessed_letters TEXT NOT NULL,
-            won BOOLEAN NOT NULL,
-            FOREING (user_id) REFERENCES user (id)
+            self.conn.execute(
+                '''
+                CREATE TABLE IF NOT EXISTS games (
+                    id INTEGER PRIMARY KEY,
+                    user_id INTEGER NOT NULL,
+                    word TEXT NOT NULL,
+                    attempts INTEGER NOT NULL,
+                    guessed_letters TEXT NOT NULL,
+                    won BOOLEAN NOT NULL,
+                    FOREIGN (user_id) REFERENCES user (id)
+                )
+                '''
             )
-            '''
-        )
 
     def register_user(self, name: str, surname: str, email: str) -> int:
         with self.conn:
@@ -80,17 +80,17 @@ class HangmanDatabase:
         with self.conn:
             guessed_letter_str = ",".join(sorted(game.guessed_letters))
             self.conn.execute(
-                '''
+                """
                 INSERT INTO games (user_id, word, attempts, guessed_letters, won)
                 VALUE (?, ?, ?, ?, ?)
-                ''',
+                """,
                 (user_id, game.word_to_guess, game.attempts_left, guessed_letter_str, won),
             )
     
     def get_user_statistic(self, user_id: int) -> dict:
         with self.conn:
             cursor = self.conn.ececute(
-                "SELECT COUNT(*) AS total_games, SUM(won) AS games_won FROM games WHERE user_id = ?", (user_id)
+                "SELECT COUNT(*) AS total_games, SUM(won) AS games_won FROM games WHERE user_id = ?", (user_id,)
             )
             row = cursor.fetchone()
             return {"games_played": row[0], "games_won": row[1]}
@@ -100,7 +100,7 @@ def get_words_from_website() -> List[str]:
     url = "https://random-words-api.vercel.app/"
     try:
         response = requests.get(url)
-        response = raise_for_status()
+        response.raise_for_status()
         words = response.json()
         return words
     except requests.exceptions.RequestException as e:
@@ -109,54 +109,54 @@ def get_words_from_website() -> List[str]:
     except Exception as e:
         logging.error("An error ocurred while fetching data from the website.")
 
+
 def main():
     print("Welcome to Hangman!")
     word_list = get_words_from_website()
     if not word_list:
-        print("Fai;ed to get words from the website. Exiting the game.")
+        print("Failed to get words from the website. Exiting the game.")
         return
     
-    db = HangmanDatabase
+    db = HangmanDatabase()
     name = input("Enter your name: ")
     surname = input("Enter your surname: ")
     email = input("Enter your email: ")
-        
 
-    # def game_cycle():
-#         while True:
-#             word_to_guess, attempts_left, guessed_letters = initialize_game()
+    user_id = db.register_user(name, surname, email)
+    game = HangmanGame(word_list)
+    game.initialize_game()
 
-#         while attempts_left > 0:
-#             current_representation = update_word_representation(word_to_guess, guessed_letters)
-#             print(f'Word: {current_representation}')
-#             print(f'Attempts left: {attempts_left}')
+    while True:
+        while game.attempts_left > 0:
+            current_representation = game.update_word_representation()
+            print(f'Word: {current_representation}')
+            print(f'Attempts left: {game.attempts_left}')
 
-#             guess = get_guess()
+            guess = game.get_guess()
+   
+            if game.make_guess(guess):
+                print("Correct guess!")
+            else:
+                print("Incorrect guess!")
+                game.attempts_left -= 1
 
-#             if len(guess) == 1:
-#                 guessed_letters.add(guess)
-#                 if guess in word_to_guess:
-#                     print("Correct guess!")
-#                 else:
-#                     print("Incorrect guess!")
-#                     attempts_left -= 1
-#             elif len(guess) == len(word_to_guess) and guess == word_to_guess:
-#                 print("Congratulations! You gussed the whole word!")
-#                 break
-#             else:
-#                 print("Incorrect guess! Try again.")
+            if "_" not in current_representation:
+                print("Congratulation! You guessed the word!")
+                db.save_games(user_id, game, won=True)
+                break
 
-#             if "_" not in current_representation:
-#                 print("Congratulation! You guessed the word!")
-#                 break
+        if game.attempts_left == 0:
+            print(f'Sorry, you lost. The word was "{game.word_to_guess}".')
+            db.save_games(user_id, game, won=False)
 
-#         if attempts_left == 0:
-#             print(f'Sorry, you lost. The word was "{word_to_guess}".')
+        play_again = input("Do you play again? (y/n): ").lower()
+        if play_again != "y":
+            break
+    
+    user_statistics = db.get_user_statistic(user_id)
+    print(f"Games played: {user_statistics ['games_played']}")
+    print(f"Games won: {user_statistics ['games_won']}")
 
-#         play_again = input("Do you play again? (y/n): ").lower()
-#         if play_again != "yes":
-#             break
 
-# if __name__ == "__main__":
-#     print("Welcome to Hangman!")
-#     game_cycle()
+if __name__ == "__main__":
+    main()
