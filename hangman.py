@@ -28,9 +28,6 @@ class HangmanGame:
     def get_guess(self ) -> str:
         return input ("Guess a letter or the whole word:").lower()
 
-    def update_word_representation(self):
-        return "".join([letter if letter in self.guessed_letters else "_" for letter in self.word_to_guess])
-    
     def make_guess(self, guess: str) -> bool:
         if len (guess) == 1:
             self.guessed_letters.add(guess)
@@ -39,6 +36,8 @@ class HangmanGame:
             return True
         return False
 
+    def update_word_representation(self):
+        return "".join([letter if letter in self.guessed_letters else "_" for letter in self.word_to_guess])
 
 class HangmanDatabase:
     def __init__(self):
@@ -102,7 +101,7 @@ class HangmanDatabase:
         
 
 def get_words_from_website() -> List[str]:
-    url = "https://random-words-api.vercel.app/"
+    url = "https://random-word-api.herokuapp.com/word"
     try:
         response = requests.get(url)
         response.raise_for_status()
@@ -135,6 +134,7 @@ def main():
     game.initialize_game()
 
     while True:
+        game.initialize_game() #pradeti zaidima is naujo
         while game.attempts_left > 0:
             current_representation = game.update_word_representation()
             print(f'Word: {current_representation}')
