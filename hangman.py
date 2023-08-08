@@ -95,6 +95,11 @@ class HangmanDatabase:
             row = cursor.fetchone()
             return {"games_played": row[0], "games_won": row[1]}
         
+    def display_user_statistics(self, user_id: int):
+        user_statistic = self.get_user_statistic(user_id)
+        print(f"Games played: {user_statistic['games_played']}")
+        print(f"Games won: {user_statistic['games_won']}")
+        
 
 def get_words_from_website() -> List[str]:
     url = "https://random-words-api.vercel.app/"
@@ -108,6 +113,9 @@ def get_words_from_website() -> List[str]:
         return[]
     except Exception as e:
         logging.error("An error ocurred while fetching data from the website.")
+
+
+
 
 
 def main():
@@ -153,9 +161,7 @@ def main():
         if play_again != "y":
             break
     
-    user_statistics = db.get_user_statistic(user_id)
-    print(f"Games played: {user_statistics ['games_played']}")
-    print(f"Games won: {user_statistics ['games_won']}")
+    db.display_user_statistics(user_id)
 
 
 if __name__ == "__main__":
