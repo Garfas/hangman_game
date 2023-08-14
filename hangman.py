@@ -29,11 +29,40 @@ class HangmanGame:
         return input ("Guess a letter or the whole word:").lower()
 
     def make_guess(self, guess: str) -> bool:
-        if len (guess) == 1:
-            self.guessed_letters.add(guess)
-            return guess in self.word_to_guess
-        elif len(guess) == len(self.word_to_guess) and guess == self.word_to_guess:
+        guess = guess.lower()
+        if guess in self.guessed_letters:
+            print(f"You've already guessed the letter '{guess}'.Try a different letter.")
+            return False
+        
+        self.guessed_letters.add(guess)
+        
+        if len(guess) == 1:
+            if guess in self.word_to_guess:
+                self.update_word_representation()
+                print("Correct guess!")
+            else:
+                print("Incorrect guess!")
+                self.attempts_left -= 1
+        
+        else:
+            if guess == self.word_to_guess:
+                self.update_word_representation()
+                print("Congratulations! Yo've guessed the whole word.")
+            else:
+                print("Incorrect guess!")
+                self.attempts_left -= 1
+
+        current_representation = self.update_word_representation()
+        print(f"Word: {current_representation}")
+        print(f"Attempts left: {self.attempts_left}")
+
+        if current_representation == self.word_to_guess:
+            print("Congratulations! You've won")
             return True
+        elif self.attempts_left == 0:
+            print(f"Game over!!! The word was {self.word_to_guess}. Better luck next time.")
+            return True
+        
         return False
 
     def update_word_representation(self):
@@ -72,6 +101,12 @@ class HangmanDatabase:
 
     def register_user(self, name: str, surname: str, email: str) -> int:
         with self.conn:
+            cursor = self.conn.execute("SELECT id FROM user WHERE email = ?", ( email,))
+            existing_user = cursor.fetchone()
+            if existing_user:
+                logging.info("User alredy exists with the same email. Returning existing ID.")
+                return existing_user[0]
+            
             cursor = self.conn.execute("INSERT INTO user (name, surname, email) VALUES (?, ?, ?)", (name, surname, email))
             return cursor.lastrowid
         
@@ -83,7 +118,7 @@ class HangmanDatabase:
                 INSERT INTO games (user_id, word, attempts, guessed_letters, won)
                 VALUES (?, ?, ?, ?, ?)
                 """,
-                (user_id, game.word_to_guess, game.attempts_left, guessed_letter_str, won),
+                (user_id, game.word_to_guess, game.attempts_left, guessed_letter_str, int(won)),
             )
     
     def get_user_statistic(self, user_id: int) -> dict:
@@ -106,12 +141,14 @@ def get_words_from_website() -> List[str]:
         response = requests.get(url)
         response.raise_for_status()
         words = response.json()
+        logging.info("Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.")
         return words
     except requests.exceptions.RequestException as e:
         logging.error("Error fetching data from the web site. Pleas check your internet connection.")
         return[]
     except Exception as e:
         logging.error("An error ocurred while fetching data from the website.")
+        return[]
 
 
 
