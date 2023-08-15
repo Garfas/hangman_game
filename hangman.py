@@ -4,10 +4,15 @@ import requests
 from bs4 import BeautifulSoup
 from typing import List, Optional
 import logging
+from colorama import Fore, Style
+
 
 #constants
 MAX_ATTEMPTS = 10
 DATABASE_FILE = "hangman.db"
+
+#  Define a list of available colors from colorama
+available_colors = [Fore.RED, Fore.GREEN, Fore.YELLOW, Fore.BLUE, Fore.MAGENTA, Fore.CYAN, Fore.WHITE]
 
 #Set up logging
 logging.basicConfig(level=logging.INFO, filename="hangman.log", format="%(asctime)s [%(levelname)s]: %(message)s")
@@ -19,6 +24,7 @@ class HangmanGame:
         self.word_to_guess: Optional[str] = None
         self.attempts_left =MAX_ATTEMPTS
         self.guessed_letters = set()
+        self.correct_letters = set()
 
     def initialize_game(self):
         self.word_to_guess = random.choice(self.word_list)
@@ -31,17 +37,22 @@ class HangmanGame:
     def make_guess(self, guess: str) -> bool:
         guess = guess.lower()
         if guess in self.guessed_letters:
-            print(f"You've already guessed the letter '{guess}'.Try a different letter.")
+            print(Fore.YELLOW + f"You've already guessed the letter '{guess}'.Try a different letter." + Style.RESET_ALL)
             return False
+        
+        if guess in self.correct_letters:
+             print(Fore.WHITE + "You've already guessed the letter '{guess}' correctly. Try a different letter." + Style.RESET_ALL)
+             return False
         
         self.guessed_letters.add(guess)
         
         if len(guess) == 1:
             if guess in self.word_to_guess:
+                self.correct_letters.add(guess)
                 self.update_word_representation()
-                print("Correct guess!")
+                print(Fore.GREEN + "Correct guess!" + Style.RESET_ALL)
             else:
-                print("Incorrect guess!")
+                print(Fore.RED + "You didn't guess the letter or the whole word!" + Style.RESET_ALL)
                 self.attempts_left -= 1
         
         else:
@@ -49,7 +60,7 @@ class HangmanGame:
                 self.update_word_representation()
                 print("Congratulations! Yo've guessed the whole word.")
             else:
-                print("Incorrect guess!")
+                print("Incorrect guess -1!")
                 self.attempts_left -= 1
 
         current_representation = self.update_word_representation()
@@ -155,16 +166,18 @@ def get_words_from_website() -> List[str]:
 
 
 def main():
-    print("Welcome to Hangman!")
+    welcome_message = f"{random.choice(available_colors)} Welcome to Hangman!" + Style.RESET_ALL
+    print(welcome_message)
     word_list = get_words_from_website()
     if not word_list:
         print("Failed to get words from the website. Exiting the game.")
         return
     
     db = HangmanDatabase()
-    name = input("Enter your name: ")
-    surname = input("Enter your surname: ")
-    email = input("Enter your email: ")
+    name_color = random.choice(available_colors)
+    name = input(f"{name_color} Enter your name: ") + Style.RESET_ALL
+    surname = input(f"{name_color} Enter your surname: ") + Style.RESET_ALL
+    email = input(f"{name_color}Enter your email: ") + Style.RESET_ALL
 
     user_id = db.register_user(name, surname, email)
     game = HangmanGame(word_list)
@@ -182,8 +195,8 @@ def main():
             if game.make_guess(guess):
                 print("Correct guess!")
             else:
-                print("Incorrect guess!")
-                game.attempts_left -= 1
+                print("If the guess is wrong -1 POINT!")
+                
 
             if "_" not in current_representation:
                 print("Congratulation! You guessed the word!")
