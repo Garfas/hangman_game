@@ -8,7 +8,7 @@ from colorama import Fore, Style
 
 
 #constants
-MAX_ATTEMPTS = 10
+MAX_ATTEMPTS = 65
 DATABASE_FILE = "hangman.db"
 
 #  Define a list of available colors from colorama
@@ -144,6 +144,19 @@ class HangmanDatabase:
         user_statistic = self.get_user_statistic(user_id)
         print(f"Games played: {user_statistic['games_played']}")
         print(f"Games won: {user_statistic['games_won']}")
+
+    def get_all_user_ids(self):
+        with self.conn:
+            cursor = self.conn.execute("SELECT id FROM user")
+            return [row[0] for row in cursor.fetchall()]
+
+
+def welcome_user(db: HangmanDatabase, user_id: int, name: str, surname: str, email: str):
+        user_registered = db.register_user (name, surname, email)
+        if user_registered:
+            print(f"Hi, {name}! and Good luck")
+        else:
+            print(f" Congratulations on registering for the game{name} {surname} {email}, Joins the game for the first time.")
         
 
 def get_words_from_website() -> List[str]:
@@ -160,6 +173,37 @@ def get_words_from_website() -> List[str]:
     except Exception as e:
         logging.error("An error ocurred while fetching data from the website.")
         return[]
+    
+
+
+    
+#Show statistics about all players' games
+def display_overall_statistics(db: HangmanDatabase):
+    total_games_played = 0
+    total_games_won = 0
+    total_words_guessed = 0
+    total_words_not_guessed = 0
+
+    for user_id in db.get_all_user_ids():
+        user_statistics = db.get_user_statistic(user_id)
+        total_games_played += user_statistics['games_played']
+        total_games_won += user_statistics['games_won']
+
+    total_words_guessed = total_games_won
+    total_words_not_guessed = total_games_played - total_games_won
+
+    if total_games_played == 0:
+        percentage_guessed = 0
+    else:
+        percentage_guessed = (total_words_guessed / total_games_played) * 100
+
+    print(f"Overall Statistics:")
+    print(f"Total games played: {total_games_played}")
+    print(f"Total games won: {total_games_won}")
+    print(f"Total words guessed: {total_words_guessed}")
+    print(f"Total words not guessed: {total_words_not_guessed}")
+    print(f"Percentage of words guessed: {percentage_guessed:.2f}%")
+
 
 
 
@@ -180,6 +224,11 @@ def main():
     email = input(f"{name_color}Enter your email: ") + Style.RESET_ALL
 
     user_id = db.register_user(name, surname, email)
+    welcome_user(db, user_id, name, surname, email)
+    display_overall_statistics(db)
+
+    
+
     game = HangmanGame(word_list)
     game.initialize_game()
 
@@ -193,7 +242,7 @@ def main():
             guess = game.get_guess()
    
             if game.make_guess(guess):
-                print("Correct guess!")
+                print()
             else:
                 print("If the guess is wrong -1 POINT!")
                 

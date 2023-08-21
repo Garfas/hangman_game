@@ -59,3 +59,80 @@
 2023-08-14 22:59:27,181 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
 2023-08-14 22:59:30,707 [INFO]: User alredy exists with the same email. Returning existing ID.
 2023-08-15 13:44:31,073 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-17 19:56:17,123 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-17 20:02:13,733 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-17 20:02:28,389 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-17 20:05:10,068 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-17 20:05:25,210 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-17 20:07:59,689 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-17 20:08:16,030 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-17 20:12:58,565 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-17 20:13:06,493 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-17 20:14:53,997 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-17 20:15:03,258 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-17 20:18:03,281 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-17 20:18:19,071 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-17 20:19:11,956 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-17 20:21:11,413 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-17 20:21:11,418 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-21 18:40:29,761 [ERROR]: Error fetching data from the web site. Pleas check your internet connection.
+2023-08-21 18:40:49,048 [ERROR]: Error fetching data from the web site. Pleas check your internet connection.
+2023-08-21 18:41:11,910 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-21 18:45:59,487 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-21 18:46:35,209 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-21 18:51:55,033 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-21 18:52:03,466 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-21 18:52:13,169 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-21 19:02:04,561 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-21 19:02:10,595 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-21 19:06:28,175 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-21 19:06:30,042 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-21 19:07:01,810 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-21 19:07:03,124 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-21 19:07:03,124 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-21 19:11:22,204 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-21 19:11:29,336 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-21 19:12:31,310 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-21 19:12:34,296 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-21 19:13:20,240 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-21 19:13:22,731 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-21 19:19:42,448 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-21 19:20:00,791 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-21 19:21:40,322 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-21 19:22:03,674 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-21 19:31:06,992 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-21 19:33:47,069 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-21 19:33:56,182 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-21 19:34:28,562 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-21 19:34:28,563 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-21 19:36:12,237 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-21 19:36:32,877 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-21 19:36:32,877 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-21 19:38:42,197 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-21 19:38:49,017 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-21 19:38:49,018 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-21 20:21:17,248 [ERROR]: Error fetching data from the web site. Pleas check your internet connection.
+2023-08-21 20:27:28,976 [ERROR]: Error fetching data from the web site. Pleas check your internet connection.
+2023-08-21 20:27:58,307 [ERROR]: Error fetching data from the web site. Pleas check your internet connection.
+2023-08-21 20:31:23,525 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-21 20:33:02,567 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-21 20:45:20,408 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-21 20:45:55,901 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-21 20:49:57,282 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-21 20:50:12,686 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-21 20:50:12,686 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-21 20:56:23,910 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-21 20:56:52,322 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-21 20:56:52,322 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-21 21:10:13,729 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-21 21:10:23,056 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-21 21:10:23,056 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-21 21:14:19,901 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-21 21:14:26,367 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-21 21:14:26,367 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-21 21:15:08,911 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-21 21:15:14,585 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-21 21:15:14,585 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-21 21:17:14,882 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-21 21:17:18,660 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-21 21:17:18,660 [INFO]: User alredy exists with the same email. Returning existing ID.
