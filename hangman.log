@@ -360,3 +360,104 @@
 2023-08-26 19:46:17,398 [INFO]: ['nondrinkers', 'cannibalisms', 'nonvocational', 'blowsily', 'percolation', 'parer', 'representatives', 'paganize', 'messan', 'ritual']
 2023-08-26 19:46:20,200 [INFO]: (17, 'b')
 2023-08-26 19:46:20,201 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-28 10:05:27,983 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-28 10:05:27,984 [INFO]: ['derivation', 'alembic', 'semidiameter', 'tilings', 'nondeposition', 'somnambulant', 'marksmen', 'foramens', 'campstool', 'stereopses']
+2023-08-28 10:05:30,502 [INFO]: (17, 'b')
+2023-08-28 10:05:30,502 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-28 10:10:41,552 [INFO]: None
+2023-08-28 10:10:41,559 [INFO]: (22, 'John')
+2023-08-28 10:10:41,559 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-28 10:13:32,143 [INFO]: (22, 'John')
+2023-08-28 10:13:32,143 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-28 10:13:32,145 [INFO]: (22, 'John')
+2023-08-28 10:13:32,145 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-28 10:17:47,624 [INFO]: (22, 'John')
+2023-08-28 10:17:47,624 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-28 10:17:47,626 [INFO]: (22, 'John')
+2023-08-28 10:17:47,626 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-28 10:18:34,113 [INFO]: None
+2023-08-28 10:18:34,122 [INFO]: (22, 'John')
+2023-08-28 10:18:34,122 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-28 10:19:05,072 [INFO]: None
+2023-08-28 10:19:05,079 [INFO]: (22, 'John')
+2023-08-28 10:19:05,079 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-28 10:21:29,408 [INFO]: (24, 'Jan')
+2023-08-28 10:21:29,408 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-28 10:21:29,410 [INFO]: (22, 'John')
+2023-08-28 10:21:29,410 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-28 10:22:16,800 [INFO]: (23, 'John')
+2023-08-28 10:22:16,800 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-28 10:22:16,802 [INFO]: (22, 'John')
+2023-08-28 10:22:16,802 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-28 10:25:08,679 [INFO]: (23, 'John')
+2023-08-28 10:25:08,679 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-28 10:25:29,846 [INFO]: (23, 'John')
+2023-08-28 10:25:29,846 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-28 10:25:52,065 [INFO]: (23, 'John')
+2023-08-28 10:25:52,065 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-28 10:26:11,412 [INFO]: (23, 'John')
+2023-08-28 10:26:11,412 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-28 10:27:21,229 [INFO]: (23, 'John')
+2023-08-28 10:27:21,229 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-28 10:28:15,823 [INFO]: (23, 'John')
+2023-08-28 10:28:15,823 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-28 10:29:20,804 [INFO]: (23, 'John')
+2023-08-28 10:29:20,804 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-28 10:30:20,470 [INFO]: (23, 'John')
+2023-08-28 10:30:20,470 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-28 10:32:20,088 [INFO]: (23, 'John')
+2023-08-28 10:32:20,088 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-28 10:33:40,088 [INFO]: (23, 'John')
+2023-08-28 10:33:40,088 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-28 10:34:24,330 [INFO]: (23, 'John')
+2023-08-28 10:34:24,330 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-28 10:34:32,783 [INFO]: (23, 'John')
+2023-08-28 10:34:32,783 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-28 10:34:42,656 [INFO]: (23, 'John')
+2023-08-28 10:34:42,656 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-28 10:34:56,057 [INFO]: (23, 'John')
+2023-08-28 10:34:56,057 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-28 10:35:26,935 [INFO]: (23, 'John')
+2023-08-28 10:35:26,935 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-28 10:38:47,874 [INFO]: None
+2023-08-28 10:43:12,655 [INFO]: None
+2023-08-28 10:43:46,271 [INFO]: None
+2023-08-28 10:44:57,885 [INFO]: None
+2023-08-28 10:46:51,337 [INFO]: None
+2023-08-28 10:47:24,139 [INFO]: None
+2023-08-28 10:48:36,191 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-28 10:48:36,193 [INFO]: ['chincapin', 'illusionistic', 'demythologize', 'angrily', 'resubmissions', 'unshrunk', 'dree', 'flailing', 'darnedest', 'ambulatories']
+2023-08-28 10:48:50,157 [INFO]: None
+2023-08-28 10:50:36,250 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-28 10:50:36,251 [INFO]: ['barter', 'zesting', 'infers', 'tailraces', 'represses', 'gluttonies', 'pursuable', 'loudliest', 'catatonic', 'transitiveness']
+2023-08-28 10:51:09,528 [INFO]: (2, 'Mantas')
+2023-08-28 10:51:09,529 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-28 10:52:53,825 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-28 10:52:53,827 [INFO]: ['enlargements', 'outflanks', 'symptomatology', 'fanaticizes', 'publicists', 'peaks', 'scrupulosity', 'broiderer', 'presentient', 'suiters']
+2023-08-28 10:53:08,523 [INFO]: None
+2023-08-28 10:57:11,208 [INFO]: None
+2023-08-28 10:58:35,732 [INFO]: None
+2023-08-28 10:59:55,591 [INFO]: None
+2023-08-28 11:19:48,018 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-28 11:19:48,020 [INFO]: ['spotless', 'protopathic', 'wieldable', 'trifocal', 'unbended', 'bollards', 'sassily', 'effortless', 'meager', 'penumbral']
+2023-08-28 11:20:21,231 [INFO]: None
+2023-08-28 11:22:16,260 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-28 11:22:16,262 [INFO]: ['deductibility', 'refloating', 'euglobulins', 'petty', 'salary', 'lixiviating', 'achievers', 'reendowing', 'bubus', 'seamanship']
+2023-08-28 11:22:34,467 [INFO]: (2, 'Mantas')
+2023-08-28 11:23:06,445 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-28 11:23:06,446 [INFO]: ['bungle', 'wearinesses', 'dovishnesses', 'anagenesis', 'blastomeres', 'motorbusses', 'outsleeps', 'doty', 'vested', 'grazed']
+2023-08-28 11:23:19,069 [INFO]: (2, 'Mantas')
+2023-08-28 11:23:19,069 [INFO]: User alredy exists with the same email. Returning existing ID.
+2023-08-28 11:23:40,720 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-28 11:23:40,722 [INFO]: ['shoaled', 'punning', 'unshed', 'scarting', 'valve', 'affaire', 'sterols', 'shiitakes', 'outstating', 'renewer']
+2023-08-28 11:23:56,758 [INFO]: None
+2023-08-28 16:48:42,330 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-28 16:48:42,332 [INFO]: ['outmaneuvered', 'barbwire', 'moonish', 'federacy', 'ruefully', 'eaglewoods', 'accenting', 'guacamoles', 'herbs', 'venetians']
+2023-08-28 16:49:16,169 [INFO]: Nonev
+2023-08-28 16:51:49,264 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-28 16:51:49,266 [INFO]: ['smaller', 'rebutting', 'kitelike', 'zestfully', 'amortises', 'fribble', 'penna', 'disaffect', 'scuzzy', 'decortication']
+2023-08-28 16:52:05,054 [INFO]: None
+2023-08-28 16:56:20,305 [INFO]: Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.
+2023-08-28 16:56:20,306 [INFO]: ['presentimental', 'bewigs', 'abutted', 'spireas', 'bowsing', 'vocationalism', 'sacrum', 'dyspepsies', 'colonializing', 'plaques']
+2023-08-28 16:56:37,853 [INFO]: (2, 'Mantas')
+2023-08-28 16:56:37,853 [INFO]: User alredy exists with the same email. Returning existing ID.

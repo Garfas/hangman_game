@@ -1,7 +1,6 @@
 import random
 import sqlite3
 import requests
-# from bs4 import BeautifulSoup
 from typing import List, Optional
 import logging
 from colorama import Fore, Style
@@ -9,7 +8,7 @@ import time
 
 
 #constants
-MAX_ATTEMPTS = 65
+MAX_ATTEMPTS = 10
 DATABASE_FILE = "hangman.db"
 
 #  Define a list of available colors from colorama
@@ -29,7 +28,7 @@ class HangmanGame:
         self.correct_letters = set()
         self.start_time = None
         self.conn = sqlite3.connect(DATABASE_FILE) 
-        self.game_id = None #inicializuojame game_id
+        self.game_id = None #initializing game_id
 
     def initialize_game(self):
         self.word_to_guess = random.choice(self.word_list)
@@ -43,7 +42,7 @@ class HangmanGame:
     def get_guess(self ) -> str:
         return input ("Guess a letter or the whole word:").lower()
 
-    def make_guess(self, guess: str):
+    def make_guess(self, guess: str) -> bool:
         guess = guess.lower()
         if guess in self.guessed_letters:
             print(Fore.YELLOW + f"You've already guessed the letter '{guess}'.Try a different letter." + Style.RESET_ALL)
@@ -59,6 +58,7 @@ class HangmanGame:
             else:
                 print(Fore.RED + "You didn't guess the letter or the whole word!" + Style.RESET_ALL)
                 self.attempts_left -= 1
+                return False
         
         else:
             self.guessed_words.add(guess)
@@ -66,9 +66,11 @@ class HangmanGame:
             if guess == self.word_to_guess:
                 self.update_word_representation()
                 print(Fore.GREEN + "Correct guess!" + Style.RESET_ALL)
+                return True
             else:
                 print(Fore.RED + "Incorrect guess! -1 point" + Style.RESET_ALL)
                 self.attempts_left -= 1
+                return False
 
 
     def update_word_representation(self):
@@ -77,6 +79,7 @@ class HangmanGame:
                 return self.word_to_guess
 
         return "".join([letter if letter in self.guessed_letters else "_" for letter in self.word_to_guess])
+
 
 class HangmanDatabase:
     def __init__(self):
@@ -218,7 +221,6 @@ def get_words_from_website() -> List:
         return[]
 
 
-
 def main():
     welcome_message = f"{random.choice(available_colors)} Welcome to Hangman!" + Style.RESET_ALL
     print(welcome_message)
@@ -258,7 +260,6 @@ def play(game, user_id):
     while game.attempts_left > 0:
         current_representation = game.update_word_representation()
 
-        # Inside the while loop in the main function
         if "_" not in current_representation:
             print("Congratulations! You guessed the word!")
             print(f"The word was: {game.word_to_guess}")
@@ -268,7 +269,6 @@ def play(game, user_id):
             db_instance.save_games(user_id, game, won=True)  # Save the game results
             db_instance.save_elapsed_time(total_time)  # Save the elapsed time
             return
-
 
         print(f'Word: {current_representation}')
         print(f'Attempts left: {game.attempts_left}')
