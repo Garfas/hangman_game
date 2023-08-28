@@ -1,10 +1,11 @@
 import random
 import sqlite3
 import requests
-from bs4 import BeautifulSoup
+# from bs4 import BeautifulSoup
 from typing import List, Optional
 import logging
 from colorama import Fore, Style
+import time
 
 
 #constants
@@ -24,29 +25,33 @@ class HangmanGame:
         self.word_to_guess: Optional[str] = None
         self.attempts_left =MAX_ATTEMPTS
         self.guessed_letters = set()
+        self.guessed_words = set()
         self.correct_letters = set()
+        self.start_time = None
+        self.conn = sqlite3.connect(DATABASE_FILE) 
+        self.game_id = None #inicializuojame game_id
 
     def initialize_game(self):
         self.word_to_guess = random.choice(self.word_list)
         self.attempts_left = MAX_ATTEMPTS
         self.guessed_letters = set()
+        self.guessed_words = set()
+        self.correct_letters = set()
+        self.start_time = time.time()
+        self.game_id = None
 
     def get_guess(self ) -> str:
         return input ("Guess a letter or the whole word:").lower()
 
-    def make_guess(self, guess: str) -> bool:
+    def make_guess(self, guess: str):
         guess = guess.lower()
         if guess in self.guessed_letters:
             print(Fore.YELLOW + f"You've already guessed the letter '{guess}'.Try a different letter." + Style.RESET_ALL)
             return False
         
-        if guess in self.correct_letters:
-             print(Fore.WHITE + "You've already guessed the letter '{guess}' correctly. Try a different letter." + Style.RESET_ALL)
-             return False
-        
-        self.guessed_letters.add(guess)
-        
         if len(guess) == 1:
+            self.guessed_letters.add(guess)
+        
             if guess in self.word_to_guess:
                 self.correct_letters.add(guess)
                 self.update_word_representation()
@@ -56,33 +61,28 @@ class HangmanGame:
                 self.attempts_left -= 1
         
         else:
+            self.guessed_words.add(guess)
+
             if guess == self.word_to_guess:
                 self.update_word_representation()
-                print("Congratulations! Yo've guessed the whole word.")
+                print(Fore.GREEN + "Correct guess!" + Style.RESET_ALL)
             else:
-                print("Incorrect guess -1!")
+                print(Fore.RED + "Incorrect guess! -1 point" + Style.RESET_ALL)
                 self.attempts_left -= 1
 
-        current_representation = self.update_word_representation()
-        print(f"Word: {current_representation}")
-        print(f"Attempts left: {self.attempts_left}")
-
-        if current_representation == self.word_to_guess:
-            print("Congratulations! You've won")
-            return True
-        elif self.attempts_left == 0:
-            print(f"Game over!!! The word was {self.word_to_guess}. Better luck next time.")
-            return True
-        
-        return False
 
     def update_word_representation(self):
+        for word in self.guessed_words:
+            if word == self.word_to_guess:
+                return self.word_to_guess
+
         return "".join([letter if letter in self.guessed_letters else "_" for letter in self.word_to_guess])
 
 class HangmanDatabase:
     def __init__(self):
         self.conn = sqlite3.connect(DATABASE_FILE)
         self.create_tables()
+        self.game_id = None
 
     def create_tables(self):
         with self.conn:
@@ -104,38 +104,41 @@ class HangmanDatabase:
                     word TEXT NOT NULL,
                     attempts INTEGER NOT NULL,
                     guessed_letters TEXT NOT NULL,
+                    elapsed_time REAL,
                     won BOOLEAN NOT NULL,
                     FOREIGN KEY (user_id) REFERENCES user (id)
                 )
                 '''
             )
 
-    def register_user(self, name: str, surname: str, email: str) -> int:
+    def register_user(self, name: str, surname: str, email: str):
         with self.conn:
-            cursor = self.conn.execute("SELECT id FROM user WHERE email = ?", ( email,))
+            cursor = self.conn.execute("SELECT id, name FROM user WHERE email = ?", ( email,))
             existing_user = cursor.fetchone()
+            logging.info(existing_user)
             if existing_user:
                 logging.info("User alredy exists with the same email. Returning existing ID.")
-                return existing_user[0]
+                return {"id": existing_user[0], "name": existing_user[1], "exists": True}
             
             cursor = self.conn.execute("INSERT INTO user (name, surname, email) VALUES (?, ?, ?)", (name, surname, email))
-            return cursor.lastrowid
+            return {"id": cursor.lastrowid, "name": name, "exists": False}
         
     def save_games(self, user_id: int, game: HangmanGame, won: bool):
         with self.conn:
             guessed_letter_str = ",".join(sorted(game.guessed_letters))
-            self.conn.execute(
+            cursor = self.conn.execute(
                 """
                 INSERT INTO games (user_id, word, attempts, guessed_letters, won)
                 VALUES (?, ?, ?, ?, ?)
                 """,
                 (user_id, game.word_to_guess, game.attempts_left, guessed_letter_str, int(won)),
             )
+            self.game_id = cursor.lastrowid #Priskiriame naujo žaidimo ID
     
     def get_user_statistic(self, user_id: int) -> dict:
         with self.conn:
             cursor = self.conn.execute(
-                "SELECT COUNT(*) AS total_games, SUM(won) AS games_won FROM games WHERE user_id = ?", (user_id,)
+                "SELECT COUNT(*) AS total_games, IFNULL(SUM(won), 0) AS games_won FROM games WHERE user_id = ?", (user_id,)
             )
             row = cursor.fetchone()
             return {"games_played": row[0], "games_won": row[1]}
@@ -145,67 +148,74 @@ class HangmanDatabase:
         print(f"Games played: {user_statistic['games_played']}")
         print(f"Games won: {user_statistic['games_won']}")
 
+    #Show statistics about all players' games
+    def display_overall_statistics(self):
+        total_games_played = 0
+        total_games_won = 0
+        total_words_guessed = 0
+        total_words_not_guessed = 0
+
+        for user_id in self.get_all_user_ids():
+            user_statistics = self.get_user_statistic(user_id)
+            total_games_played += user_statistics['games_played']
+            total_games_won += user_statistics['games_won']
+
+        total_words_guessed = total_games_won
+        total_words_not_guessed = total_games_played - total_games_won
+
+        if total_games_played == 0:
+            percentage_guessed = 0
+        else:
+            percentage_guessed = (total_words_guessed / total_games_played) * 100
+
+        print(f"Overall Statistics:")
+        print(f"Total games played: {total_games_played}")
+        print(f"Total games won: {total_games_won}")
+        print(f"Total words guessed: {total_words_guessed}")
+        print(f"Total words not guessed: {total_words_not_guessed}")
+        print(f"Percentage of words guessed: {percentage_guessed:.2f}%")
+
     def get_all_user_ids(self):
         with self.conn:
             cursor = self.conn.execute("SELECT id FROM user")
             return [row[0] for row in cursor.fetchall()]
 
+    def save_elapsed_time(self, elapsed_time: float):
+        with self.conn:
+            self.conn.execute(
+                """
+                UPDATE games
+                SET elapsed_time = ?
+                WHERE id = ?
+                """,
+                (elapsed_time, self.game_id),
+            )
 
-def welcome_user(db: HangmanDatabase, user_id: int, name: str, surname: str, email: str):
+
+def welcome_user(db: HangmanDatabase, name: str, surname: str, email: str):
         user_registered = db.register_user (name, surname, email)
-        if user_registered:
-            print(f"Hi, {name}! and Good luck")
+        if user_registered['exists']:
+            print(f"Hi, {user_registered['name']} and Good luck" + Style.RESET_ALL)
         else:
-            print(f" Congratulations on registering for the game{name} {surname} {email}, Joins the game for the first time.")
-        
+            print(f"Congratulations on registering for the game{name} {surname} {email}, Joins the game for the first time." + Style.RESET_ALL)
+        return user_registered['id']
 
-def get_words_from_website() -> List[str]:
-    url = "https://random-word-api.herokuapp.com/word"
+def get_words_from_website() -> List:
+    url = "https://random-word-api.herokuapp.com/word?number=10"
     try:
         response = requests.get(url)
         response.raise_for_status()
         words = response.json()
         logging.info("Successfully fetched words from the website, https://random-word-api.herokuapp.com/word.")
         return words
+    
     except requests.exceptions.RequestException as e:
         logging.error("Error fetching data from the web site. Pleas check your internet connection.")
         return[]
+    
     except Exception as e:
         logging.error("An error ocurred while fetching data from the website.")
         return[]
-    
-
-
-    
-#Show statistics about all players' games
-def display_overall_statistics(db: HangmanDatabase):
-    total_games_played = 0
-    total_games_won = 0
-    total_words_guessed = 0
-    total_words_not_guessed = 0
-
-    for user_id in db.get_all_user_ids():
-        user_statistics = db.get_user_statistic(user_id)
-        total_games_played += user_statistics['games_played']
-        total_games_won += user_statistics['games_won']
-
-    total_words_guessed = total_games_won
-    total_words_not_guessed = total_games_played - total_games_won
-
-    if total_games_played == 0:
-        percentage_guessed = 0
-    else:
-        percentage_guessed = (total_words_guessed / total_games_played) * 100
-
-    print(f"Overall Statistics:")
-    print(f"Total games played: {total_games_played}")
-    print(f"Total games won: {total_games_won}")
-    print(f"Total words guessed: {total_words_guessed}")
-    print(f"Total words not guessed: {total_words_not_guessed}")
-    print(f"Percentage of words guessed: {percentage_guessed:.2f}%")
-
-
-
 
 
 
@@ -213,54 +223,79 @@ def main():
     welcome_message = f"{random.choice(available_colors)} Welcome to Hangman!" + Style.RESET_ALL
     print(welcome_message)
     word_list = get_words_from_website()
+    logging.info(word_list)
     if not word_list:
         print("Failed to get words from the website. Exiting the game.")
         return
-    
-    db = HangmanDatabase()
+
+    db = HangmanDatabase()  # Create an instance of HangmanDatabase
+
     name_color = random.choice(available_colors)
-    name = input(f"{name_color} Enter your name: ") + Style.RESET_ALL
-    surname = input(f"{name_color} Enter your surname: ") + Style.RESET_ALL
-    email = input(f"{name_color}Enter your email: ") + Style.RESET_ALL
+    name = input(f"{name_color} Enter your name: ")
+    surname = input(f"{name_color} Enter your surname: ")
+    email = input(f"{name_color}Enter your email: ")
 
-    user_id = db.register_user(name, surname, email)
-    welcome_user(db, user_id, name, surname, email)
-    display_overall_statistics(db)
-
-    
-
+    user_id = welcome_user(db, name, surname, email)
+ 
     game = HangmanGame(word_list)
-    game.initialize_game()
-
-    while True:
-        game.initialize_game() #pradeti zaidima is naujo
-        while game.attempts_left > 0:
-            current_representation = game.update_word_representation()
-            print(f'Word: {current_representation}')
-            print(f'Attempts left: {game.attempts_left}')
-
-            guess = game.get_guess()
    
-            if game.make_guess(guess):
-                print()
-            else:
-                print("If the guess is wrong -1 POINT!")
-                
+    while True:
+        play(game, user_id)
 
-            if "_" not in current_representation:
-                print("Congratulation! You guessed the word!")
-                db.save_games(user_id, game, won=True)
-                break
+        play_again = input("Do you want to play again? (y/n): ").lower()
+        if play_again != "y":
+            break
+
+    db.display_user_statistics(user_id)
+    db.display_overall_statistics()
+
+def play(game, user_id):
+    game.initialize_game()#pradeti zaidima is naujo
+    total_time = 0
+
+    db_instance = HangmanDatabase()
+
+    while game.attempts_left > 0:
+        current_representation = game.update_word_representation()
+
+        # Inside the while loop in the main function
+        if "_" not in current_representation:
+            print("Congratulations! You guessed the word!")
+            print(f"The word was: {game.word_to_guess}")
+            print(f"Elapsed play time: {total_time:.2f}")
+
+            elapsed_time = time.time() - game.start_time 
+            db_instance.save_games(user_id, game, won=True)  # Save the game results
+            db_instance.save_elapsed_time(total_time)  # Save the elapsed time
+            return
+
+
+        print(f'Word: {current_representation}')
+        print(f'Attempts left: {game.attempts_left}')
+        print("If the guess is wrong -1 POINT!")
+
+        game.start_time = time.time()
+        guess = game.get_guess()
+
+        current_time = time.time()
+        timesup = current_time - game.start_time > 10
+
+        if timesup:
+            print(Fore.RED + "Time's up! You tok too long to make a guess " + Style.RESET_ALL)
+            game.attempts_left -= 1
+        
+        elapsed_time = round(current_time - game.start_time, 3)
+        total_time += elapsed_time
+
+        if not timesup:
+            game.make_guess(guess)
 
         if game.attempts_left == 0:
             print(f'Sorry, you lost. The word was "{game.word_to_guess}".')
-            db.save_games(user_id, game, won=False)
-
-        play_again = input("Do you play again? (y/n): ").lower()
-        if play_again != "y":
-            break
-    
-    db.display_user_statistics(user_id)
+            print(f"Elapsed play time: {total_time:.2f}")
+            db_instance.save_games(user_id, game, won=False)  # Use the same db_instance to save game results
+            db_instance.save_elapsed_time(total_time)
+            return
 
 
 if __name__ == "__main__":
