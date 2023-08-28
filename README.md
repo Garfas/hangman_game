@@ -3,6 +3,7 @@
 # Action Plan for Hangman Game (terminal version)
 
 ## 1. Project Preparation
+
 1. Create a new GitHub repository for the Hangman game.
 2. Create a virtual environment to isolate project dependencies.
 3. Create a README file containing information about the project and its usage.
