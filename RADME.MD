@@ -1,5 +1,8 @@
 **HANGMAN GAME**
 
+
+#The first step you need to take is to run the **"hangman.py"** file. Then, follow the instructions described.
+
 **Registration:**
 At the beginning of the game, the player will need to create a registration. This will allow them to save and track their game results and progress.
 
