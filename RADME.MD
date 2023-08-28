@@ -1,6 +1,5 @@
 **HANGMAN GAME**
 
-
 #The first step you need to take is to run the **"hangman.py"** file. Then, follow the instructions described.
 
 **Registration:**
