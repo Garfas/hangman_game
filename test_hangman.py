@@ -1,4 +1,3 @@
-
 import unittest
 from unittest.mock import patch, Mock
 from io import StringIO
@@ -19,6 +18,7 @@ class TestHangmanGame(unittest.TestCase):
         self.assertIsNotNone(self.game.start_time)
         self.assertIsNone(self.game.game_id)       
 
+
 class TestHangmanDatabase(unittest.TestCase):
     def setUp(self):
         self.db = HangmanDatabase()
@@ -30,10 +30,9 @@ class TestHangmanDatabase(unittest.TestCase):
 
     def test_register_user(self):
         user_info = self.db.register_user("Jona", "Dog", "john@gmail.com")
-        self.assertFalse(user_info["exists"])  # <--- Pakeista iš self.assertTrue
+        self.assertFalse(user_info["exists"]) 
         self.assertEqual(user_info["name"], "Jona")
         self.assertEqual(user_info["id"], 1)
-
 
 class TestHangmanIntegration(unittest.TestCase):
     def setUp(self):
@@ -50,8 +49,8 @@ class TestHangmanIntegration(unittest.TestCase):
         mock_input.side_effect = ["a", "b", "c", "apple"]
         user_id = welcome_user(self.db, "Johna", "Dog", "john@gmail.com")
 
-        # Pakeiskite šią eilutę:
-        self.game.get_guess = lambda: mock_input().lower()  # Naudokite mock_input kaip get_guess metodą
+        
+        self.game.get_guess = lambda: mock_input().lower()  
 
         play(self.game, user_id)
 
