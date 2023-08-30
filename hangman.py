@@ -223,7 +223,6 @@ class HangmanDatabase:
                 (elapsed_time, self.game_id),
             )
 
-
 def welcome_user(db: HangmanDatabase, name: str, surname: str, email: str):
         user_registered = db.register_user (name, surname, email)
         if user_registered['exists']:
