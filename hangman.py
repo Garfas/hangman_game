@@ -48,8 +48,13 @@ class HangmanGame:
         logging.info("A new game has been initialized.")
 
     def get_guess(self ) -> str:
-        return input ("Guess a letter or the whole word:").lower()
-
+        while True:
+            guess = input ("Guess a letter or the whole word:").lower()
+            if guess.isalpha():
+                return guess
+            else:
+                 print(Fore.RED + "Please enter a valid letter." + Style.RESET_ALL)
+    
     def make_guess(self, guess: str) -> bool: 
         """
         Process the player's guess.
