@@ -28,9 +28,16 @@ class HangmanGame:
         self.correct_letters = set()
         self.start_time = None
         self.conn = sqlite3.connect(DATABASE_FILE) 
-        self.game_id = None #initializing game_id
+        self.game_id = None 
 
     def initialize_game(self):
+        """
+        Initialize a new game session.
+
+        This function resets the game parameters, such as the word to guess, the number of attempts left,
+        guessed letters and words, and the game start time.
+
+        """
         self.word_to_guess = random.choice(self.word_list)
         self.attempts_left = MAX_ATTEMPTS
         self.guessed_letters = set()
@@ -38,11 +45,18 @@ class HangmanGame:
         self.correct_letters = set()
         self.start_time = time.time()
         self.game_id = None
+        logging.info("A new game has been initialized.")
 
     def get_guess(self ) -> str:
         return input ("Guess a letter or the whole word:").lower()
 
-    def make_guess(self, guess: str) -> bool:
+    def make_guess(self, guess: str) -> bool: 
+        """
+        Process the player's guess.
+
+        :param guess: The guessed letter or word.
+        :return: True if the game is won, False otherwise.
+        """
         guess = guess.lower()
         if guess in self.guessed_letters:
             print(Fore.YELLOW + f"You've already guessed the letter '{guess}'.Try a different letter." + Style.RESET_ALL)
@@ -73,7 +87,7 @@ class HangmanGame:
                 return False
 
 
-    def update_word_representation(self):
+    def update_word_representation(self): # Update word mapping
         for word in self.guessed_words:
             if word == self.word_to_guess:
                 return self.word_to_guess
@@ -87,7 +101,7 @@ class HangmanDatabase:
         self.create_tables()
         self.game_id = None
 
-    def create_tables(self):
+    def create_tables(self):# sql request to create two cells in the db: user and games
         with self.conn:
             self.conn.execute(
                 """
@@ -114,7 +128,15 @@ class HangmanDatabase:
                 '''
             )
 
-    def register_user(self, name: str, surname: str, email: str):
+    def register_user(self, name: str, surname: str, email: str): 
+        """
+        Register a new user in the database.
+
+        :param name: The user's name.
+        :param surname: The user's surname.
+        :param email: The user's email address.
+        :return: A dictionary with user information and registration status.
+        """
         with self.conn:
             cursor = self.conn.execute("SELECT id, name FROM user WHERE email = ?", ( email,))
             existing_user = cursor.fetchone()
@@ -136,7 +158,7 @@ class HangmanDatabase:
                 """,
                 (user_id, game.word_to_guess, game.attempts_left, guessed_letter_str, int(won)),
             )
-            self.game_id = cursor.lastrowid #Priskiriame naujo žaidimo ID
+            self.game_id = cursor.lastrowid # We assign a new game ID
     
     def get_user_statistic(self, user_id: int) -> dict:
         with self.conn:
@@ -146,13 +168,20 @@ class HangmanDatabase:
             row = cursor.fetchone()
             return {"games_played": row[0], "games_won": row[1]}
         
-    def display_user_statistics(self, user_id: int):
+    def display_user_statistics(self, user_id: int): # prints the player's statistics to the terminal
         user_statistic = self.get_user_statistic(user_id)
         print(f"Games played: {user_statistic['games_played']}")
         print(f"Games won: {user_statistic['games_won']}")
 
-    #Show statistics about all players' games
     def display_overall_statistics(self):
+        """
+        Display overall statistics about all players' games.
+
+        This function retrieves and displays statistics about the total number of games played,
+        total games won, total words guessed, total words not guessed, and the percentage of
+        words guessed by all players.
+
+        """
         total_games_played = 0
         total_games_won = 0
         total_words_guessed = 0
@@ -178,12 +207,12 @@ class HangmanDatabase:
         print(f"Total words not guessed: {total_words_not_guessed}")
         print(f"Percentage of words guessed: {percentage_guessed:.2f}%")
 
-    def get_all_user_ids(self):
+    def get_all_user_ids(self):# we get a list of all users from the db
         with self.conn:
             cursor = self.conn.execute("SELECT id FROM user")
             return [row[0] for row in cursor.fetchall()]
 
-    def save_elapsed_time(self, elapsed_time: float):
+    def save_elapsed_time(self, elapsed_time: float): # updating db used to save past game time
         with self.conn:
             self.conn.execute(
                 """
@@ -200,7 +229,7 @@ def welcome_user(db: HangmanDatabase, name: str, surname: str, email: str):
         if user_registered['exists']:
             print(f"Hi, {user_registered['name']} and Good luck" + Style.RESET_ALL)
         else:
-            print(f"Congratulations on registering for the game{name} {surname} {email}, Joins the game for the first time." + Style.RESET_ALL)
+            print(f"Congratulations on registering for the game {name} {surname} {email}, Joins the game for the first time." + Style.RESET_ALL)
         return user_registered['id']
 
 def get_words_from_website() -> List:
@@ -221,7 +250,7 @@ def get_words_from_website() -> List:
         return[]
 
 
-def main():
+def main():# the main part of the program and controls the execution of the game
     welcome_message = f"{random.choice(available_colors)} Welcome to Hangman!" + Style.RESET_ALL
     print(welcome_message)
     word_list = get_words_from_website()
@@ -252,7 +281,13 @@ def main():
     db.display_overall_statistics()
 
 def play(game, user_id):
-    game.initialize_game()#pradeti zaidima is naujo
+    """
+    Execute the main game loop.
+
+    :param game: An instance of the HangmanGame class representing the game.
+    :param user_id: The user ID associated with the game.
+    """
+    game.initialize_game()
     total_time = 0
 
     db_instance = HangmanDatabase()
