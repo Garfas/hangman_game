@@ -87,7 +87,7 @@ class HangmanGame:
                 return False
 
 
-    def update_word_representation(self): # Update word mapping
+    def update_word_representation(self) -> str: # Update word mapping
         for word in self.guessed_words:
             if word == self.word_to_guess:
                 return self.word_to_guess
@@ -279,7 +279,7 @@ def main():# the main part of the program and controls the execution of the game
     db.display_user_statistics(user_id)
     db.display_overall_statistics()
 
-def play(game, user_id):
+def play(game: HangmanGame, user_id: int):
     """
     Execute the main game loop.
 
@@ -292,7 +292,7 @@ def play(game, user_id):
     db_instance = HangmanDatabase()
 
     while game.attempts_left > 0:
-        current_representation = game.update_word_representation()
+        current_representation: str = game.update_word_representation()
 
         if "_" not in current_representation:
             print("Congratulations! You guessed the word!")
@@ -311,7 +311,7 @@ def play(game, user_id):
         game.start_time = time.time()
         guess = game.get_guess()
 
-        current_time = time.time()
+        current_time: float = time.time()
         timesup = current_time - game.start_time > 10
 
         if timesup:
