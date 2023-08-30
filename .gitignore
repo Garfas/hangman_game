@@ -3,5 +3,5 @@
 .venv
 .gitignore
 __pycache__
-*.db
 hangman.log
+hangman.db
