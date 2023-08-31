@@ -50,7 +50,7 @@ class HangmanGame:
     def get_guess(self ) -> str:
         while True:
             guess = input ("Guess a letter or the whole word:").lower()
-            if guess.isalpha():
+            if guess.isalpha():# checks if a letter is entered, not a symbol or number
                 return guess
             else:
                  print(Fore.RED + "Please enter a valid letter." + Style.RESET_ALL)
